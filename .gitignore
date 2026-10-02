@@ -1,0 +1,23 @@
+# ─── Root .gitignore ──────────────────────────────────────────────────────────
+.env
+*.pem
+*.key
+
+# Node
+node_modules/
+npm-debug.log*
+
+# SQLite (local only)
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Docker
+.docker/
