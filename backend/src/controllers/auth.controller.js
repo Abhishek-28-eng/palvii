@@ -65,7 +65,7 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { identifier, password } = req.body; // identifier = email or mobile
+    const { identifier, password } = req.body; // identifier = email or mobil
 
     if (!identifier || !password) {
       return res.status(400).json({ success: false, message: 'Identifier and password are required' });
