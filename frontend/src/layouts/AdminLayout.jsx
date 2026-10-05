@@ -3,23 +3,27 @@ import { Outlet } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingBasket, ClipboardList,
   Users, Truck, Star, Settings, Menu, X, Leaf, LogOut,
-  CalendarDays, FileText
+  CalendarDays, FileText, BarChart2, MapPin
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 const navItems = [
-  { to: '/admin', icon: <LayoutDashboard size={18} />, label: 'Dashboard', exact: true },
-  { to: '/admin/orders', icon: <ShoppingBasket size={18} />, label: 'Orders' },
-  { to: '/admin/trial-requests', icon: <FileText size={18} />, label: 'Trial Requests' },
-  { to: '/admin/products', icon: <Package size={18} />, label: 'Products' },
-  { to: '/admin/categories', icon: <Leaf size={18} />, label: 'Categories' },
-  { to: '/admin/baskets', icon: <ShoppingBasket size={18} />, label: 'Baskets' },
-  { to: '/admin/subscriptions', icon: <CalendarDays size={18} />, label: 'Subscriptions' },
-  { to: '/admin/deliveries', icon: <Truck size={18} />, label: 'Deliveries' },
-  { to: '/admin/customers', icon: <Users size={18} />, label: 'Customers' },
-  { to: '/admin/reviews', icon: <Star size={18} />, label: 'Reviews' },
+  { to: '/admin',                icon: <LayoutDashboard size={18} />, label: 'Dashboard',      exact: true },
+  { to: '/admin/orders',         icon: <ShoppingBasket size={18} />,  label: 'Orders' },
+  { to: '/admin/trial-requests', icon: <FileText size={18} />,        label: 'Trial Requests' },
+  { to: '/admin/products',       icon: <Package size={18} />,         label: 'Products' },
+  { to: '/admin/categories',     icon: <Leaf size={18} />,            label: 'Categories' },
+  { to: '/admin/baskets',        icon: <ShoppingBasket size={18} />,  label: 'Baskets' },
+  { to: '/admin/subscriptions',  icon: <CalendarDays size={18} />,    label: 'Subscriptions' },
+  { to: '/admin/deliveries',     icon: <Truck size={18} />,           label: 'Deliveries' },
+  { to: '/admin/customers',      icon: <Users size={18} />,           label: 'Customers' },
+  { to: '/admin/reviews',        icon: <Star size={18} />,            label: 'Reviews' },
+  { divider: true, label: 'Growth' },
+  { to: '/admin/analytics',      icon: <BarChart2 size={18} />,       label: 'Analytics' },
+  { to: '/admin/service-areas',  icon: <MapPin size={18} />,          label: 'Service Areas' },
 ];
+
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

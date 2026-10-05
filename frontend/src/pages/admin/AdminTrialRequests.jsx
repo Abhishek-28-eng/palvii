@@ -111,15 +111,15 @@ export default function AdminTrialRequests() {
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-100">
+              <thead className="bg-gray-50 border-b border-gray-100 text-left text-xs font-semibold text-gray-500 uppercase">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-gray-600">Customer</th>
-                  <th className="text-left p-4 font-semibold text-gray-600">Area / Society</th>
-                  <th className="text-left p-4 font-semibold text-gray-600">Family</th>
-                  <th className="text-left p-4 font-semibold text-gray-600">Prefers</th>
-                  <th className="text-left p-4 font-semibold text-gray-600">Status</th>
-                  <th className="text-left p-4 font-semibold text-gray-600">Date</th>
-                  <th className="text-left p-4 font-semibold text-gray-600">Action</th>
+                  <th className="p-4">Customer</th>
+                  <th className="p-4">Location</th>
+                  <th className="p-4">Family</th>
+                  <th className="p-4">Day & Slot</th>
+                  <th className="p-4">Status</th>
+                  <th className="p-4">Requested</th>
+                  <th className="p-4">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -133,7 +133,10 @@ export default function AdminTrialRequests() {
                     </td>
                     <td className="p-4 text-gray-600">{t.area}{t.society ? ` · ${t.society}` : ''}</td>
                     <td className="p-4 text-gray-600">{t.family_size || '—'}</td>
-                    <td className="p-4 text-gray-600">{t.preferred_delivery_day || '—'}</td>
+                    <td className="p-4 text-gray-600">
+                      {t.preferred_delivery_day || '—'}
+                      {t.preferred_slot && <span className="block text-xs text-gray-400">{t.preferred_slot}</span>}
+                    </td>
                     <td className="p-4"><span className={`badge text-xs ${STATUS_COLORS[t.status] || 'badge-yellow'}`}>{t.status}</span></td>
                     <td className="p-4 text-gray-500 text-xs">{new Date(t.created_at).toLocaleDateString('en-IN')}</td>
                     <td className="p-4">

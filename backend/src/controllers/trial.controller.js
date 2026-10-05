@@ -6,7 +6,7 @@ const create = async (req, res, next) => {
   try {
     const {
       name, mobile, whatsapp, email, address,
-      area, society, pincode, family_size, preferred_delivery_day, notes,
+      area, society, pincode, family_size, preferred_delivery_day, preferred_slot, notes,
     } = req.body;
 
     if (!name || !mobile || !address) {
@@ -53,7 +53,7 @@ const create = async (req, res, next) => {
     const trial = await TrialRequest.create({
       name, mobile, whatsapp: whatsapp || mobile,
       email, address, area, society, pincode,
-      family_size, preferred_delivery_day, notes,
+      family_size, preferred_delivery_day, preferred_slot, notes,
       user_id: req.user?.id || null,
       status: 'PENDING',
     });

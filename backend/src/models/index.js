@@ -100,6 +100,7 @@ const TrialRequest = sequelize.define('TrialRequest', {
   pincode: { type: DataTypes.STRING(10), allowNull: true },
   family_size: { type: DataTypes.STRING(20), allowNull: true },
   preferred_delivery_day: { type: DataTypes.STRING(20), allowNull: true },
+  preferred_slot: { type: DataTypes.STRING(50), allowNull: true },
   notes: { type: DataTypes.TEXT, allowNull: true },
   status: {
     type: DataTypes.ENUM('PENDING', 'APPROVED', 'SCHEDULED', 'DELIVERED', 'FEEDBACK_RECEIVED', 'CONVERTED', 'NOT_CONVERTED', 'REJECTED'),
@@ -212,6 +213,30 @@ const Review = sequelize.define('Review', {
   is_featured: { type: DataTypes.BOOLEAN, defaultValue: false },
 }, { tableName: 'reviews' });
 
+// ─── ServiceArea ──────────────────────────────────────
+// Admin-managed list of pincodes / areas Palvii currently serves
+const ServiceArea = sequelize.define('ServiceArea', {
+  id:      { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+  pincode: { type: DataTypes.STRING(10), allowNull: true },
+  area:    { type: DataTypes.STRING(100), allowNull: false },
+  city:    { type: DataTypes.STRING(100), defaultValue: 'Pune' },
+  is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
+  notes:   { type: DataTypes.STRING(255), allowNull: true },
+}, { tableName: 'service_areas' });
+
+// ─── Waitlist ─────────────────────────────────────────
+// Captures demand from users in unserviceable areas
+const Waitlist = sequelize.define('Waitlist', {
+  id:      { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+  name:    { type: DataTypes.STRING(100), allowNull: false },
+  mobile:  { type: DataTypes.STRING(15), allowNull: false },
+  area:    { type: DataTypes.STRING(100), allowNull: false },
+  pincode: { type: DataTypes.STRING(10), allowNull: true },
+  society: { type: DataTypes.STRING(100), allowNull: true },
+  notified: { type: DataTypes.BOOLEAN, defaultValue: false },
+  notified_at: { type: DataTypes.DATE, allowNull: true },
+}, { tableName: 'waitlist' });
+
 // ─── Associations ─────────────────────────────────────
 User.hasMany(Address, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Address.belongsTo(User, { foreignKey: 'user_id' });
@@ -272,4 +297,6 @@ module.exports = {
   Subscription,
   Delivery,
   Review,
+  ServiceArea,
+  Waitlist,
 };

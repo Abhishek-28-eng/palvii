@@ -25,13 +25,15 @@ import MyOrdersPage from '../pages/customer/MyOrders';
 import MySubscriptionsPage from '../pages/customer/MySubscriptions';
 
 // Admin pages
-import AdminDashboard from '../pages/admin/AdminDashboard';
-import AdminProducts from '../pages/admin/AdminProducts';
-import AdminOrders from '../pages/admin/AdminOrders';
+import AdminDashboard     from '../pages/admin/AdminDashboard';
+import AdminProducts      from '../pages/admin/AdminProducts';
+import AdminOrders        from '../pages/admin/AdminOrders';
 import AdminTrialRequests from '../pages/admin/AdminTrialRequests';
-import AdminCustomers from '../pages/admin/AdminCustomers';
-import AdminDeliveries from '../pages/admin/AdminDeliveries';
-import AdminReviews from '../pages/admin/AdminReviews';
+import AdminCustomers     from '../pages/admin/AdminCustomers';
+import AdminDeliveries    from '../pages/admin/AdminDeliveries';
+import AdminReviews       from '../pages/admin/AdminReviews';
+import AdminAnalytics     from '../pages/admin/AdminAnalytics';
+import AdminServiceAreas  from '../pages/admin/AdminServiceAreas';
 
 // Lazy stubs for pages not yet fully built
 const Stub = ({ name }) => (
@@ -90,6 +92,8 @@ export default function AppRoutes() {
         <Route path="deliveries" element={<AdminDeliveries />} />
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="reviews" element={<AdminReviews />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
+        <Route path="service-areas" element={<AdminServiceAreas />} />
       </Route>
     </Routes>
   );

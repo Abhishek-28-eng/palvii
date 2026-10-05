@@ -47,6 +47,18 @@ export const trialService = {
   delete:          (id)          => api.delete(`/trial-requests/${id}`),
 };
 
+export const growthService = {
+  checkServiceability: (params)  => api.get('/growth/serviceability', { params }),
+  joinWaitlist:        (data)    => api.post('/growth/waitlist', data),
+  getAnalytics:        ()        => api.get('/growth/analytics'),
+  getServiceAreas:     ()        => api.get('/growth/service-areas'),
+  addServiceArea:      (data)    => api.post('/growth/service-areas', data),
+  updateServiceArea:   (id, data)=> api.put(`/growth/service-areas/${id}`, data),
+  deleteServiceArea:   (id)      => api.delete(`/growth/service-areas/${id}`),
+  getWaitlist:         (params)  => api.get('/growth/waitlist', { params }),
+  notifyWaitlistArea:  (area)    => api.post(`/growth/waitlist/notify/${encodeURIComponent(area)}`),
+};
+
 export const subscriptionService = {
   getPlans: () => api.get('/subscriptions/plans'),
   getAllPlans: () => api.get('/subscriptions/plans/all'),

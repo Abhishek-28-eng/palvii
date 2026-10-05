@@ -8,17 +8,18 @@ const { sequelize } = require('./config/database');
 const errorHandler = require('./middleware/errorHandler');
 
 // Route imports
-const authRoutes = require('./routes/auth.routes');
-const productRoutes = require('./routes/product.routes');
-const categoryRoutes = require('./routes/category.routes');
-const basketRoutes = require('./routes/basket.routes');
-const orderRoutes = require('./routes/order.routes');
-const trialRoutes = require('./routes/trial.routes');
+const authRoutes         = require('./routes/auth.routes');
+const productRoutes      = require('./routes/product.routes');
+const categoryRoutes     = require('./routes/category.routes');
+const basketRoutes       = require('./routes/basket.routes');
+const orderRoutes        = require('./routes/order.routes');
+const trialRoutes        = require('./routes/trial.routes');
 const subscriptionRoutes = require('./routes/subscription.routes');
-const deliveryRoutes = require('./routes/delivery.routes');
-const reviewRoutes = require('./routes/review.routes');
-const adminRoutes = require('./routes/admin.routes');
-const userRoutes = require('./routes/user.routes');
+const deliveryRoutes     = require('./routes/delivery.routes');
+const reviewRoutes       = require('./routes/review.routes');
+const adminRoutes        = require('./routes/admin.routes');
+const userRoutes         = require('./routes/user.routes');
+const growthRoutes       = require('./routes/growth.routes');
 
 const app = express();
 
@@ -66,17 +67,18 @@ app.get('/api/health', (req, res) => {
 });
 
 // Routes
-app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/baskets', basketRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/trial-requests', trialRoutes);
+app.use('/api/auth',          authLimiter, authRoutes);
+app.use('/api/products',      productRoutes);
+app.use('/api/categories',    categoryRoutes);
+app.use('/api/baskets',       basketRoutes);
+app.use('/api/orders',        orderRoutes);
+app.use('/api/trial-requests',trialRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
-app.use('/api/deliveries', deliveryRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/deliveries',    deliveryRoutes);
+app.use('/api/reviews',       reviewRoutes);
+app.use('/api/admin',         adminRoutes);
+app.use('/api/users',         userRoutes);
+app.use('/api/growth',        growthRoutes);
 
 // 404 handler
 app.use((req, res) => {

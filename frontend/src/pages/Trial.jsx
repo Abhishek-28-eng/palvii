@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sprout, CheckCircle2, MessageCircle, Star, ArrowLeft, ShieldCheck, Truck, AlertCircle, RefreshCw, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { trialService } from '../services';
+import { trialService, growthService } from '../services';
 import { openWhatsApp, whatsAppMessages } from '../utils/whatsapp';
 
 const VEGGIES = [
@@ -90,24 +90,85 @@ function DuplicateBlock({ trialStatus, serverMessage }) {
 export default function TrialPage() {
   const [duplicate, setDuplicate] = useState(null);
   const [checkingMobile, setCheckingMobile] = useState(false);
+  
+  // Blinkit-style flow states
+  const [step, setStep] = useState('CHECK'); // CHECK | TRIAL | WAITLIST | SUCCESS | WAITLIST_SUCCESS
+  const [checkingService, setCheckingService] = useState(false);
+  const [serviceCheck, setServiceCheck] = useState({ area: '', pincode: '' });
+
   const [form, setForm] = useState({
     name: '',
     mobile: '',
     whatsapp: '',
     address: '',
     area: '',
+    pincode: '',
     society: '',
     family_size: '',
     preferred_delivery_day: '',
+    preferred_slot: '',
   });
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     if (name === 'mobile' && !form.whatsapp) {
       setForm((prev) => ({ ...prev, whatsapp: value }));
+    }
+  };
+
+  const handleServiceCheckChange = (e) => {
+    const { name, value } = e.target;
+    setServiceCheck(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckServiceability = async (e) => {
+    e.preventDefault();
+    if (!serviceCheck.area && !serviceCheck.pincode) {
+      toast.error('Please enter an area or pincode');
+      return;
+    }
+    setCheckingService(true);
+    try {
+      const res = await growthService.checkServiceability(serviceCheck);
+      if (res.data.serviceable) {
+        toast.success(`Great news! We deliver to ${res.data.area || serviceCheck.area || serviceCheck.pincode}.`);
+        setForm(prev => ({ 
+          ...prev, 
+          area: res.data.area || serviceCheck.area, 
+          pincode: serviceCheck.pincode 
+        }));
+        setStep('TRIAL');
+      } else {
+        setStep('WAITLIST');
+      }
+    } catch (err) {
+      toast.error('Failed to check serviceability');
+    } finally {
+      setCheckingService(false);
+    }
+  };
+
+  const handleWaitlistSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.mobile || !serviceCheck.area) return;
+    setLoading(true);
+    try {
+      const payload = {
+        name: form.name,
+        mobile: form.mobile,
+        area: serviceCheck.area,
+        pincode: serviceCheck.pincode,
+        society: form.society
+      };
+      const res = await growthService.joinWaitlist(payload);
+      toast.success(res.data.message);
+      setStep('WAITLIST_SUCCESS');
+    } catch (err) {
+      toast.error('Failed to join waitlist');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,7 +209,7 @@ export default function TrialPage() {
     setLoading(true);
     try {
       await trialService.submit(form);
-      setSubmitted(true);
+      setStep('SUCCESS');
       toast.success("Trial request submitted! We'll contact you on WhatsApp.");
     } catch (err) {
       const data = err.response?.data;
@@ -236,8 +297,8 @@ export default function TrialPage() {
           </div>
 
           {/* Right form column */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 shadow-card border border-gray-100">
-            {submitted ? (
+          <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 shadow-card border border-gray-100 relative min-h-[500px]">
+            {step === 'SUCCESS' && (
               <div className="py-10 text-center animate-slide-up">
                 <div className="text-6xl mb-4">🎉</div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-3 font-display">
@@ -247,30 +308,124 @@ export default function TrialPage() {
                   Thank you! We have received your request. Our team will verify your locality and connect with you on WhatsApp to confirm delivery time.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button
-                    onClick={() => openWhatsApp(whatsAppMessages.trialRequest())}
-                    className="btn-primary"
-                  >
-                    <MessageCircle size={18} />
-                    Confirm on WhatsApp
+                  <button onClick={() => openWhatsApp(whatsAppMessages.trialRequest())} className="btn-primary">
+                    <MessageCircle size={18} /> Confirm on WhatsApp
                   </button>
-                  <Link to="/baskets" className="btn-secondary">
-                    View Other Baskets
-                  </Link>
+                  <Link to="/baskets" className="btn-secondary">View Other Baskets</Link>
                 </div>
               </div>
-            ) : (
-              <div>
+            )}
+
+            {step === 'WAITLIST_SUCCESS' && (
+              <div className="py-10 text-center animate-slide-up">
+                <div className="text-6xl mb-4">📝</div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-3 font-display">
+                  You're on the Waitlist!
+                </h2>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm leading-relaxed">
+                  We're expanding quickly. We'll send you a WhatsApp message the moment Palvii starts delivering fresh farm produce to {serviceCheck.area || serviceCheck.pincode}.
+                </p>
+                <Link to="/" className="btn-primary inline-flex">Return to Home</Link>
+              </div>
+            )}
+
+            {step === 'CHECK' && (
+              <div className="animate-fade-in">
+                <div className="mb-8">
+                  <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1 mb-2">
+                    <MapPin size={13} className="text-brand" />
+                    <span className="text-xs font-semibold text-brand">Serviceability Check</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 font-display">
+                    Where should we deliver?
+                  </h2>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Check if Palvii's farm-fresh delivery is available in your area.
+                  </p>
+                </div>
+
+                <form onSubmit={handleCheckServiceability} className="space-y-5">
+                  <div>
+                    <label className="label">Your Area / Locality *</label>
+                    <input
+                      name="area"
+                      value={serviceCheck.area}
+                      onChange={handleServiceCheckChange}
+                      placeholder="e.g. Baner, Wakad, Kothrud"
+                      required
+                      className="input py-3 text-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Pincode (Optional)</label>
+                    <input
+                      name="pincode"
+                      value={serviceCheck.pincode}
+                      onChange={handleServiceCheckChange}
+                      placeholder="e.g. 411045"
+                      className="input py-3 text-lg"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={checkingService}
+                    className="btn-primary w-full py-4 text-base font-semibold shadow-green mt-4"
+                  >
+                    {checkingService ? 'Checking...' : 'Check Availability'}
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {step === 'WAITLIST' && (
+              <div className="animate-slide-left">
+                <button onClick={() => setStep('CHECK')} className="text-gray-400 hover:text-gray-600 mb-4 inline-block">← Back</button>
+                <div className="mb-6">
+                  <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-full px-3 py-1 mb-2">
+                    <AlertCircle size={13} className="text-orange-500" />
+                    <span className="text-xs font-semibold text-orange-600">Coming Soon</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 font-display">
+                    Oops! We're not in {serviceCheck.area || serviceCheck.pincode} yet.
+                  </h2>
+                  <p className="text-gray-500 text-sm mt-2">
+                    But we're expanding fast! Join the waitlist and be the first to know (and get your free basket) when we arrive in your neighborhood.
+                  </p>
+                </div>
+
+                <form onSubmit={handleWaitlistSubmit} className="space-y-4">
+                  <div>
+                    <label className="label">Full Name *</label>
+                    <input name="name" value={form.name} onChange={handleChange} placeholder="Your name" required className="input" />
+                  </div>
+                  <div>
+                    <label className="label">WhatsApp Number *</label>
+                    <input name="mobile" value={form.mobile} onChange={handleChange} placeholder="10-digit mobile" required type="tel" className="input" />
+                  </div>
+                  <div>
+                    <label className="label">Society / Building (Optional)</label>
+                    <input name="society" value={form.society} onChange={handleChange} placeholder="e.g. Greenview Apts" className="input" />
+                  </div>
+                  <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 text-base font-semibold shadow-green mt-2">
+                    {loading ? 'Joining...' : 'Join the Waitlist'}
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {step === 'TRIAL' && (
+              <div className="animate-slide-left">
+                <button onClick={() => setStep('CHECK')} className="text-gray-400 hover:text-gray-600 mb-4 inline-block">← Change Area</button>
                 <div className="mb-6">
                   <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1 mb-2">
                     <Star size={13} className="text-brand" />
                     <span className="text-xs font-semibold text-brand">First Order Free</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 font-display">
-                    Where should we deliver your basket?
+                    Complete your request
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
-                    Fill in your details below to claim your free trial basket.
+                    Delivering to <span className="font-semibold text-gray-700">{form.area}</span>. Fill in the rest to claim your free basket!
                   </p>
                 </div>
 
@@ -278,46 +433,20 @@ export default function TrialPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="label">Full Name *</label>
-                      <input
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        placeholder="Your full name"
-                        required
-                        className="input"
-                      />
+                      <input name="name" value={form.name} onChange={handleChange} placeholder="Your full name" required className="input" />
                     </div>
                     <div>
                       <label className="label">Mobile Number *</label>
-                      <input
-                        name="mobile"
-                        value={form.mobile}
-                        onChange={handleChange}
-                        placeholder="10-digit mobile"
-                        required
-                        type="tel"
-                        className="input"
-                      />
+                      <input name="mobile" value={form.mobile} onChange={handleChange} onBlur={handleMobileBlur} placeholder="10-digit mobile" required type="tel" className="input" />
+                      {checkingMobile && <span className="text-xs text-brand mt-1 flex items-center gap-1"><RefreshCw size={10} className="animate-spin" /> Checking...</span>}
                     </div>
                     <div>
                       <label className="label">WhatsApp Number</label>
-                      <input
-                        name="whatsapp"
-                        value={form.whatsapp}
-                        onChange={handleChange}
-                        placeholder="If different from mobile"
-                        type="tel"
-                        className="input"
-                      />
+                      <input name="whatsapp" value={form.whatsapp} onChange={handleChange} placeholder="If different from mobile" type="tel" className="input" />
                     </div>
                     <div>
                       <label className="label">Family Size</label>
-                      <select
-                        name="family_size"
-                        value={form.family_size}
-                        onChange={handleChange}
-                        className="select"
-                      >
+                      <select name="family_size" value={form.family_size} onChange={handleChange} className="select">
                         <option value="">Select size</option>
                         <option value="1-2">1-2 people</option>
                         <option value="3-4">3-4 people</option>
@@ -329,63 +458,46 @@ export default function TrialPage() {
 
                   <div>
                     <label className="label">Delivery Address *</label>
-                    <textarea
-                      name="address"
-                      value={form.address}
-                      onChange={handleChange}
-                      placeholder="Flat/House number, building, street address"
-                      required
-                      className="input h-20 resize-none"
-                    />
+                    <textarea name="address" value={form.address} onChange={handleChange} placeholder="Flat/House number, building, street address" required className="input h-20 resize-none" />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="label">Area / Locality</label>
-                      <input
-                        name="area"
-                        value={form.area}
-                        onChange={handleChange}
-                        placeholder="e.g. Baner, Wakad, Kothrud"
-                        className="input"
-                      />
+                      <label className="label">Area / Locality *</label>
+                      <input name="area" value={form.area} onChange={handleChange} required className="input bg-gray-50" readOnly />
                     </div>
                     <div>
                       <label className="label">Society / Building Name</label>
-                      <input
-                        name="society"
-                        value={form.society}
-                        onChange={handleChange}
-                        placeholder="e.g. Greenview Apts"
-                        className="input"
-                      />
+                      <input name="society" value={form.society} onChange={handleChange} placeholder="e.g. Greenview Apts" className="input" />
                     </div>
                   </div>
 
-                  <div>
-                    <label className="label">Preferred Delivery Day</label>
-                    <select
-                      name="preferred_delivery_day"
-                      value={form.preferred_delivery_day}
-                      onChange={handleChange}
-                      className="select"
-                    >
-                      <option value="">Any day</option>
-                      <option value="Monday">Monday</option>
-                      <option value="Tuesday">Tuesday</option>
-                      <option value="Wednesday">Wednesday</option>
-                      <option value="Thursday">Thursday</option>
-                      <option value="Friday">Friday</option>
-                      <option value="Saturday">Saturday</option>
-                      <option value="Sunday">Sunday</option>
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="label">Preferred Delivery Day</label>
+                      <select name="preferred_delivery_day" value={form.preferred_delivery_day} onChange={handleChange} className="select">
+                        <option value="">Any day</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Preferred Time Slot</label>
+                      <select name="preferred_slot" value={form.preferred_slot || ''} onChange={handleChange} className="select">
+                        <option value="">Any time</option>
+                        <option value="Morning (7 AM - 10 AM)">Morning (7 AM - 10 AM)</option>
+                        <option value="Afternoon (12 PM - 3 PM)">Afternoon (12 PM - 3 PM)</option>
+                        <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
+                      </select>
+                    </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn-primary w-full py-4 text-base font-semibold shadow-green mt-2"
-                  >
+                  <button type="submit" disabled={loading} className="btn-primary w-full py-4 text-base font-semibold shadow-green mt-2">
                     <Sprout size={18} />
                     {loading ? 'Submitting...' : 'Claim My Free Basket'}
                   </button>
