@@ -129,15 +129,16 @@ jobs:
             cd /home/ubuntu/palvii
 
             # Write .env file from GitHub secrets
+            # Values are double-quoted so Docker Compose handles special chars (+, =, #, etc.)
             cat > .env << 'EOF'
-            GITHUB_USERNAME=${{ github.repository_owner }}
-            DB_NAME=${{ secrets.DB_NAME }}
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            JWT_EXPIRES_IN=7d
-            PALVII_WHATSAPP_NUMBER=${{ secrets.PALVII_WHATSAPP_NUMBER }}
+            GITHUB_USERNAME="${{ github.repository_owner }}"
+            DB_NAME="${{ secrets.DB_NAME }}"
+            DB_USER="${{ secrets.DB_USER }}"
+            DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            DB_ROOT_PASSWORD="${{ secrets.DB_ROOT_PASSWORD }}"
+            JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            JWT_EXPIRES_IN="7d"
+            PALVII_WHATSAPP_NUMBER="${{ secrets.PALVII_WHATSAPP_NUMBER }}"
             EOF
 
             # Log in to GHCR on the server
