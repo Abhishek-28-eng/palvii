@@ -7,8 +7,9 @@ on:
 env:
   REGISTRY: ghcr.io
   GITHUB_USERNAME: ${{ github.repository_owner }}
-  BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/palvii-backend
-  FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/palvii-frontend
+  # Docker image names MUST be lowercase — hardcode them
+  BACKEND_IMAGE: ghcr.io/abhishek-28-eng/palvii-backend
+  FRONTEND_IMAGE: ghcr.io/abhishek-28-eng/palvii-frontend
 
 jobs:
   # ── 1. Build & Push Backend Image ───────────────────────────────────────────
@@ -130,8 +131,9 @@ jobs:
 
             # Write .env file from GitHub secrets
             # Values are double-quoted so Docker Compose handles special chars (+, =, #, etc.)
+            # GITHUB_USERNAME must be lowercase — Docker image names are case-sensitive
             cat > .env << 'EOF'
-            GITHUB_USERNAME="${{ github.repository_owner }}"
+            GITHUB_USERNAME="abhishek-28-eng"
             DB_NAME="${{ secrets.DB_NAME }}"
             DB_USER="${{ secrets.DB_USER }}"
             DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
