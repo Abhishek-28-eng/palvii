@@ -35,7 +35,7 @@ function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/trial" className="btn-primary text-base py-3.5 px-8">
+              <Link to="/baskets" className="btn-primary text-base py-3.5 px-8">
                 <Sprout size={20} />
                 Try Your First Basket
               </Link>

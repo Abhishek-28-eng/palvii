@@ -39,10 +39,12 @@ export const orderService = {
 };
 
 export const trialService = {
-  submit: (data) => api.post('/trial-requests', data),
-  getAll: (params) => api.get('/trial-requests', { params }),
-  getOne: (id) => api.get(`/trial-requests/${id}`),
-  updateStatus: (id, data) => api.put(`/trial-requests/${id}/status`, data),
+  submit:          (data)        => api.post('/trial-requests', data),
+  checkByMobile:   (mobile)      => api.get('/trial-requests/check', { params: { mobile } }),
+  getAll:          (params)      => api.get('/trial-requests', { params }),
+  getOne:          (id)          => api.get(`/trial-requests/${id}`),
+  updateStatus:    (id, data)    => api.put(`/trial-requests/${id}/status`, data),
+  delete:          (id)          => api.delete(`/trial-requests/${id}`),
 };
 
 export const subscriptionService = {

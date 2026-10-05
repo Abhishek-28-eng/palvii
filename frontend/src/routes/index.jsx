@@ -13,6 +13,7 @@ import SubscriptionsPage from '../pages/Subscriptions';
 import AboutPage from '../pages/About';
 import ContactPage from '../pages/Contact';
 import HowItWorksPage from '../pages/HowItWorks';
+import TrialPage from '../pages/Trial';
 
 // Auth pages
 import LoginPage from '../pages/auth/Login';
@@ -55,7 +56,7 @@ export default function AppRoutes() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
-        <Route path="/trial" element={<HomePage />} />
+        <Route path="/trial" element={<TrialPage />} />
 
         {/* Auth */}
         <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
