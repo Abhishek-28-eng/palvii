@@ -1,5 +1,6 @@
 const { TrialRequest, User } = require('../models');
 const { Op } = require('sequelize');
+const { notifyNewTrialRequest } = require('../utils/notify');
 
 const create = async (req, res, next) => {
   try {
@@ -56,6 +57,9 @@ const create = async (req, res, next) => {
       user_id: req.user?.id || null,
       status: 'PENDING',
     });
+
+    // 🔔 Notify owner on WhatsApp — fire-and-forget, never blocks the response
+    notifyNewTrialRequest(trial).catch(() => {});
 
     res.status(201).json({
       success: true,

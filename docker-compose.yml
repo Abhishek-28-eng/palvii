@@ -40,6 +40,8 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
       PALVII_WHATSAPP_NUMBER: ${PALVII_WHATSAPP_NUMBER}
+      OWNER_WHATSAPP: ${OWNER_WHATSAPP}
+      CALLMEBOT_API_KEY: ${CALLMEBOT_API_KEY}
       FRONTEND_URL: https://palvii.devwithabhi.de
     volumes:
       - backend_uploads:/app/uploads

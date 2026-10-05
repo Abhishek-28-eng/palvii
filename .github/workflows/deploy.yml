@@ -141,6 +141,8 @@ jobs:
             JWT_SECRET="${{ secrets.JWT_SECRET }}"
             JWT_EXPIRES_IN="7d"
             PALVII_WHATSAPP_NUMBER="${{ secrets.PALVII_WHATSAPP_NUMBER }}"
+            OWNER_WHATSAPP="${{ secrets.OWNER_WHATSAPP }}"
+            CALLMEBOT_API_KEY="${{ secrets.CALLMEBOT_API_KEY }}"
             EOF
 
             # Log in to GHCR on the server
