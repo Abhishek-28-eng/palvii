@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sprout, CheckCircle2, MessageCircle, Star, ArrowLeft, ShieldCheck, Truck, AlertCircle, RefreshCw, ArrowRight } from 'lucide-react';
+import { Sprout, CheckCircle2, MessageCircle, Star, ArrowLeft, ShieldCheck, Truck, AlertCircle, RefreshCw, ArrowRight, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { trialService, growthService } from '../services';
 import { openWhatsApp, whatsAppMessages } from '../utils/whatsapp';
