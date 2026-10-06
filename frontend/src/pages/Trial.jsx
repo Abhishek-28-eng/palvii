@@ -6,25 +6,25 @@ import { trialService, growthService } from '../services';
 import { openWhatsApp, whatsAppMessages } from '../utils/whatsapp';
 
 const VEGGIES = [
-  { name: 'Tomato',   emoji: '🍅', detail: 'Vine-ripened' },
-  { name: 'Potato',   emoji: '🥔', detail: 'Farm-fresh' },
-  { name: 'Onion',    emoji: '🧅', detail: 'Red & white' },
-  { name: 'Spinach',  emoji: '🥬', detail: 'Tender leaves' },
-  { name: 'Capsicum', emoji: '🫑', detail: 'Crisp & sweet' },
-  { name: 'Carrot',   emoji: '🥕', detail: 'Naturally sweet' },
-  { name: 'Cucumber', emoji: '🥒', detail: 'Cool & fresh' },
+  { name: 'Tomato',   detail: 'Vine-ripened' },
+  { name: 'Potato',   detail: 'Farm-fresh' },
+  { name: 'Onion',    detail: 'Red & white' },
+  { name: 'Spinach',  detail: 'Tender leaves' },
+  { name: 'Capsicum', detail: 'Crisp & sweet' },
+  { name: 'Carrot',   detail: 'Naturally sweet' },
+  { name: 'Cucumber', detail: 'Cool & fresh' },
 ];
 
 // Status configs for the duplicate-trial wall
 const DUPLICATE_STATUS_CONFIG = {
-  PENDING:           { icon: '🌿', badge: 'In Review',  badgeColor: 'bg-green-100 text-green-700',  cta: 'pending'   },
-  APPROVED:          { icon: '🎉', badge: 'Approved',   badgeColor: 'bg-emerald-100 text-emerald-700', cta: 'approved' },
-  SCHEDULED:         { icon: '📦', badge: 'Scheduled',  badgeColor: 'bg-blue-100 text-blue-700',    cta: 'approved'  },
-  DELIVERED:         { icon: '🥕', badge: 'Delivered',  badgeColor: 'bg-orange-100 text-orange-700', cta: 'subscribe' },
-  FEEDBACK_RECEIVED: { icon: '💚', badge: 'Completed',  badgeColor: 'bg-green-100 text-green-700',  cta: 'subscribe' },
-  CONVERTED:         { icon: '🌱', badge: 'Subscribed', badgeColor: 'bg-brand/10 text-brand',        cta: 'dashboard' },
-  NOT_CONVERTED:     { icon: '🛒', badge: 'Trial Used', badgeColor: 'bg-amber-100 text-amber-700',  cta: 'subscribe' },
-  REJECTED:          { icon: '🙏', badge: 'Unavailable',badgeColor: 'bg-gray-100 text-gray-500',    cta: 'contact'   },
+  PENDING:           { badge: 'In Review',  badgeColor: 'bg-green-100 text-green-700',  cta: 'pending'   },
+  APPROVED:          { badge: 'Approved',   badgeColor: 'bg-emerald-100 text-emerald-700', cta: 'approved' },
+  SCHEDULED:         { badge: 'Scheduled',  badgeColor: 'bg-blue-100 text-blue-700',    cta: 'approved'  },
+  DELIVERED:         { badge: 'Delivered',  badgeColor: 'bg-orange-100 text-orange-700', cta: 'subscribe' },
+  FEEDBACK_RECEIVED: { badge: 'Completed',  badgeColor: 'bg-green-100 text-green-700',  cta: 'subscribe' },
+  CONVERTED:         { badge: 'Subscribed', badgeColor: 'bg-brand/10 text-brand',        cta: 'dashboard' },
+  NOT_CONVERTED:     { badge: 'Trial Used', badgeColor: 'bg-amber-100 text-amber-700',  cta: 'subscribe' },
+  REJECTED:          { badge: 'Unavailable',badgeColor: 'bg-gray-100 text-gray-500',    cta: 'contact'   },
 };
 
 function DuplicateBlock({ trialStatus, serverMessage }) {
@@ -38,9 +38,6 @@ function DuplicateBlock({ trialStatus, serverMessage }) {
         <div className="h-1 bg-gradient-to-r from-brand to-brand-leaf" />
 
         <div className="px-8 pt-10 pb-8">
-          {/* Emoji */}
-          <div className="text-6xl mb-4">{cfg.icon}</div>
-
           {/* Status badge */}
           <span className={`inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4 ${cfg.badgeColor}`}>
             {cfg.badge}
@@ -250,7 +247,7 @@ export default function TrialPage() {
               />
               <div className="absolute top-3 left-3">
                 <span className="bg-brand text-white text-xs font-bold px-3 py-1 rounded-full shadow-green">
-                  🎁 FREE TRIAL
+                  FREE TRIAL
                 </span>
               </div>
             </div>
@@ -272,7 +269,7 @@ export default function TrialPage() {
                 {VEGGIES.map((v) => (
                   <div key={v.name} className="flex items-center justify-between text-sm">
                     <span className="flex items-center gap-2 font-medium text-gray-800">
-                      <span>{v.emoji}</span> {v.name}
+                      {v.name}
                     </span>
                     <span className="text-xs text-gray-400 italic">{v.detail}</span>
                   </div>
@@ -300,15 +297,14 @@ export default function TrialPage() {
           <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 shadow-card border border-gray-100 relative min-h-[500px]">
             {step === 'SUCCESS' && (
               <div className="py-10 text-center animate-slide-up">
-                <div className="text-6xl mb-4">🎉</div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-3 font-display">
-                  Free Basket Requested!
+                  Request Received
                 </h2>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm leading-relaxed">
-                  Thank you! We have received your request. Our team will verify your locality and connect with you on WhatsApp to confirm delivery time.
+                  Your request has been submitted. Our team will connect with you via WhatsApp to verify your locality and confirm delivery.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button onClick={() => openWhatsApp(whatsAppMessages.trialRequest())} className="btn-primary">
+                  <button onClick={() => openWhatsApp(whatsAppMessages.trialRequest(form))} className="btn-primary">
                     <MessageCircle size={18} /> Confirm on WhatsApp
                   </button>
                   <Link to="/baskets" className="btn-secondary">View Other Baskets</Link>
@@ -318,9 +314,8 @@ export default function TrialPage() {
 
             {step === 'WAITLIST_SUCCESS' && (
               <div className="py-10 text-center animate-slide-up">
-                <div className="text-6xl mb-4">📝</div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-3 font-display">
-                  You're on the Waitlist!
+                  Added to Waitlist
                 </h2>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm leading-relaxed">
                   We're expanding quickly. We'll send you a WhatsApp message the moment Palvii starts delivering fresh farm produce to {serviceCheck.area || serviceCheck.pincode}.
@@ -337,10 +332,10 @@ export default function TrialPage() {
                     <span className="text-xs font-semibold text-brand">Serviceability Check</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 font-display">
-                    Where should we deliver?
+                    Delivery Location
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
-                    Check if Palvii's farm-fresh delivery is available in your area.
+                    Check if we deliver to your area.
                   </p>
                 </div>
 
@@ -422,7 +417,7 @@ export default function TrialPage() {
                     <span className="text-xs font-semibold text-brand">First Order Free</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 font-display">
-                    Complete your request
+                    Complete Request
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
                     Delivering to <span className="font-semibold text-gray-700">{form.area}</span>. Fill in the rest to claim your free basket!
@@ -498,8 +493,7 @@ export default function TrialPage() {
                   </div>
 
                   <button type="submit" disabled={loading} className="btn-primary w-full py-4 text-base font-semibold shadow-green mt-2">
-                    <Sprout size={18} />
-                    {loading ? 'Submitting...' : 'Claim My Free Basket'}
+                    {loading ? 'Submitting...' : 'Submit Request'}
                   </button>
 
                   <p className="text-[11px] text-gray-400 text-center mt-2">

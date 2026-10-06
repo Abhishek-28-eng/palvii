@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, ShoppingBasket, ChevronDown } from 'lucide-react';
+import { Search, Filter, ShoppingBasket, ChevronDown, Leaf } from 'lucide-react';
 import { productService, categoryService } from '../services';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
@@ -29,7 +29,7 @@ function ProductCard({ product }) {
         {product.image ? (
           <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
         ) : (
-          <span className="text-6xl group-hover:scale-110 transition-transform duration-200">🥬</span>
+          <Leaf size={48} className="text-brand/20 group-hover:scale-110 transition-transform duration-200" />
         )}
         {product.is_featured && (
           <span className="absolute top-3 left-3 badge-green text-xs">Featured</span>
@@ -200,7 +200,9 @@ export default function VegetablesPage() {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-6xl mb-4">🥬</div>
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+              <Leaf size={32} className="text-gray-400" />
+            </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No vegetables found</h3>
             <p className="text-gray-500">Try adjusting your filters</p>
           </div>

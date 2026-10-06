@@ -1,141 +1,141 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     @apply font-sans text-gray-800 bg-white antialiased;
     font-family: 'Inter', system-ui, sans-serif;
   }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
+  /* ── Buttons */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand text-white font-semibold rounded-xl
-           hover:bg-brand-light active:bg-brand-dark transition-all duration-200
-           shadow-green hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-brand text-white font-semibold rounded-xl
+           hover:bg-brand-dark active:scale-[0.97]
+           transition-all duration-200
+           shadow-green hover:shadow-[0_8px_32px_rgba(45,106,79,0.4)]
+           focus:outline-none focus:ring-2 focus:ring-brand/40 focus:ring-offset-2
            disabled:opacity-60 disabled:cursor-not-allowed;
   }
-
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-brand font-semibold rounded-xl border-2 border-brand
-           hover:bg-brand-cream active:bg-brand-warm transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-white text-brand font-semibold rounded-xl
+           border-2 border-brand/20 hover:border-brand
+           hover:bg-green-50 active:scale-[0.97]
+           transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-brand/30 focus:ring-offset-2
            disabled:opacity-60 disabled:cursor-not-allowed;
   }
-
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-brand font-semibold rounded-xl border border-brand/30
-           hover:border-brand hover:bg-brand-cream transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-transparent text-brand font-semibold rounded-xl
+           border border-brand/30 hover:border-brand
+           hover:bg-brand-cream active:scale-[0.97] transition-all duration-200;
+  }
+  .btn-white {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-white text-brand-dark font-bold rounded-xl
+           hover:bg-gray-50 active:scale-[0.97] transition-all duration-200
+           shadow-lg;
   }
 
+  /* ── Cards */
   .card {
-    @apply bg-white rounded-2xl shadow-card border border-gray-100;
+    @apply bg-white rounded-2xl shadow-card border border-gray-100/80;
   }
-
   .card-hover {
-    @apply card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200;
+    @apply card cursor-pointer hover:shadow-card-hover hover:-translate-y-1.5
+           transition-all duration-300;
+  }
+  .card-glass {
+    @apply bg-white/80 backdrop-blur-md rounded-2xl
+           border border-white/60 shadow-card;
   }
 
+  /* ── Forms */
   .input {
     @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-800
-           focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
-           placeholder:text-gray-400 transition-all duration-200;
+           focus:outline-none focus:ring-2 focus:ring-brand/25 focus:border-brand
+           placeholder:text-gray-400 transition-all duration-200 text-[15px];
   }
+  .select { @apply input appearance-none cursor-pointer; }
+  .label  { @apply block text-sm font-medium text-gray-700 mb-1.5; }
 
-  .select {
-    @apply input appearance-none cursor-pointer;
-  }
-
-  .label {
-    @apply block text-sm font-medium text-gray-700 mb-1.5;
-  }
-
+  /* ── Typography */
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 font-display;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.03em;
+  }
+  .section-subtitle { @apply text-lg text-gray-500 leading-relaxed font-normal; }
+  .hero-title {
+    @apply text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05];
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.04em;
   }
 
-  .section-subtitle {
-    @apply text-lg text-gray-600 leading-relaxed;
-  }
+  /* ── Badges */
+  .badge       { @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide; }
+  .badge-green  { @apply badge bg-green-100 text-green-800; }
+  .badge-yellow { @apply badge bg-amber-100 text-amber-700; }
+  .badge-red    { @apply badge bg-red-100 text-red-700; }
+  .badge-blue   { @apply badge bg-blue-100 text-blue-700; }
+  .badge-gray   { @apply badge bg-gray-100 text-gray-600; }
 
-  .badge {
-    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold;
-  }
+  /* ── Layout */
+  .page-container { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
 
-  .badge-green {
-    @apply badge bg-green-100 text-green-800;
+  /* ── Pill tags */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full
+           bg-green-50 border border-green-200 text-brand
+           text-xs font-semibold;
   }
-
-  .badge-yellow {
-    @apply badge bg-yellow-100 text-yellow-800;
-  }
-
-  .badge-red {
-    @apply badge bg-red-100 text-red-800;
-  }
-
-  .badge-blue {
-    @apply badge bg-blue-100 text-blue-800;
-  }
-
-  .page-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  .section-chip {
+    @apply inline-flex items-center gap-1.5 px-4 py-1.5
+           bg-brand text-white rounded-full
+           text-xs font-bold uppercase tracking-widest;
   }
 }
 
 @layer utilities {
-  .text-brand-green {
-    color: #2D6A4F;
+  .text-gradient {
+    background: linear-gradient(135deg, #2D6A4F 0%, #52B788 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-
-  .bg-brand-section {
-    background-color: #FAF7F2;
+  .hero-gradient {
+    background: linear-gradient(155deg, #0d1c12 0%, #1B4332 45%, #2D6A4F 100%);
   }
+  .section-bg { background-color: #F7FAF8; }
 
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.4s ease-out;
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  /* Animations */
+  .animate-fade-in   { animation: fadeIn   0.5s ease-in-out both; }
+  .animate-slide-up  { animation: slideUp  0.45s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-slide-left{ animation: slideLeft 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-scale-in  { animation: scaleIn  0.3s cubic-bezier(0.16,1,0.3,1) both; }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+@keyframes slideUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideLeft { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+@keyframes scaleIn   { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-  background: #2D6A4F44;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #2D6A4F;
-}
+/* Scrollbar */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #2D6A4F55; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #2D6A4F; }
+
+

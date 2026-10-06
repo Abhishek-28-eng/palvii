@@ -1,14 +1,14 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Lock, Sprout, Clock } from 'lucide-react';
 
 const VEGGIES = [
-  { name: 'Tomato',   emoji: '🍅', detail: 'Vine-ripened' },
-  { name: 'Potato',   emoji: '🥔', detail: 'Farm-fresh' },
-  { name: 'Onion',    emoji: '🧅', detail: 'Red & white' },
-  { name: 'Spinach',  emoji: '🥬', detail: 'Tender leaves' },
-  { name: 'Capsicum', emoji: '🫑', detail: 'Crisp & sweet' },
-  { name: 'Carrot',   emoji: '🥕', detail: 'Naturally sweet' },
-  { name: 'Cucumber', emoji: '🥒', detail: 'Cool & fresh' },
+  { name: 'Tomato',   detail: 'Vine-ripened' },
+  { name: 'Potato',   detail: 'Farm-fresh' },
+  { name: 'Onion',    detail: 'Red & white' },
+  { name: 'Spinach',  detail: 'Tender leaves' },
+  { name: 'Capsicum', detail: 'Crisp & sweet' },
+  { name: 'Carrot',   detail: 'Naturally sweet' },
+  { name: 'Cucumber', detail: 'Cool & fresh' },
 ];
 
 function FreeTrialCard() {
@@ -24,7 +24,7 @@ function FreeTrialCard() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-black/10" />
           <div className="absolute top-5 left-5">
             <span className="inline-flex items-center gap-1.5 bg-brand text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-green tracking-wide">
-              🎁 FREE TRIAL
+              FREE TRIAL
             </span>
           </div>
           <div className="absolute bottom-5 left-5 right-5 lg:hidden">
@@ -54,7 +54,6 @@ function FreeTrialCard() {
             <div className="space-y-2.5">
               {VEGGIES.map((v) => (
                 <div key={v.name} className="flex items-center gap-3">
-                  <span className="text-xl w-8 text-center flex-shrink-0">{v.emoji}</span>
                   <div className="flex-1 flex items-center justify-between border-b border-dashed border-gray-100 pb-2.5">
                     <span className="text-sm font-semibold text-gray-800">{v.name}</span>
                     <span className="text-xs text-gray-400 italic">{v.detail}</span>
@@ -74,7 +73,7 @@ function FreeTrialCard() {
               className="inline-flex items-center gap-2.5 bg-brand hover:bg-brand-dark text-white font-semibold px-7 py-3.5 rounded-2xl transition-all duration-200 shadow-green hover:shadow-[0_6px_24px_rgba(45,106,79,0.4)] group/btn text-sm"
             >
               <Sprout size={16} className="group-hover/btn:rotate-12 transition-transform duration-200" />
-              Request Free Trial
+              Submit Request
               <ArrowRight size={15} className="group-hover/btn:translate-x-0.5 transition-transform duration-200" />
             </Link>
           </div>
@@ -207,7 +206,7 @@ export default function BasketsPage() {
             className="inline-flex items-center gap-2.5 bg-white text-brand font-bold px-8 py-3.5 rounded-2xl hover:bg-brand-cream transition-all duration-200 shadow-lg text-sm group/cta"
           >
             <Sprout size={17} className="group-hover/cta:rotate-12 transition-transform duration-200" />
-            Request Your Free Basket
+            Submit Request
             <ArrowRight size={15} className="group-hover/cta:translate-x-0.5 transition-transform duration-200" />
           </Link>
         </div>

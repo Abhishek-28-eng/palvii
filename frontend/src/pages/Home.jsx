@@ -1,140 +1,180 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Leaf, CheckCircle, Package, Truck, Star, MessageCircle, ChevronDown, Sprout, Sun, ShoppingBasket } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Leaf, CheckCircle, Truck, Star, MessageCircle, Sprout, MapPin, Shield, ChevronRight } from 'lucide-react';
 import { openWhatsApp, whatsAppMessages } from '../utils/whatsapp';
-import { trialService } from '../services';
-import toast from 'react-hot-toast';
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// ─── HERO ─────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative bg-brand-cream overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute top-10 right-10 w-96 h-96 rounded-full bg-brand" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-brand-light" />
+    <section className="relative overflow-hidden hero-gradient" style={{ minHeight: '92vh' }}>
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #52B788 0%, transparent 70%)' }} />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-8" style={{ background: 'radial-gradient(circle, #74C69D 0%, transparent 70%)' }} />
       </div>
 
-      <div className="page-container py-20 md:py-28">
+      <div className="page-container relative z-10 flex flex-col justify-center" style={{ minHeight: '92vh', paddingTop: '5rem', paddingBottom: '5rem' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left */}
           <div className="animate-fade-in">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 bg-white border border-brand/20 rounded-full px-4 py-1.5 mb-6">
-              <Leaf size={14} className="text-brand" />
-              <span className="text-sm font-medium text-brand">Our Farm to Your Home</span>
+            {/* Eyebrow pill */}
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-green-300 text-sm font-medium">Now delivering in Pune</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-display mb-6">
-              Fresh From <span className="text-brand">Our Farm.</span>
-              <br />
-              Straight to Your <span className="text-brand-earth">Home.</span>
+            <h1 className="hero-title text-white mb-6">
+              Farm fresh.<br />
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #52B788, #74C69D)' }}>
+                Delivered fast.
+              </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8 max-w-lg">
-              Fresh vegetables carefully selected, sorted, packed and delivered to your doorstep — directly from our farms and partner farmers.
+            <p className="text-gray-300 text-lg leading-relaxed mb-10 max-w-lg">
+              Fresh vegetables sourced from local farms. Sorted, packed, and delivered straight to your door.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/baskets" className="btn-primary text-base py-3.5 px-8">
-                <Sprout size={20} />
-                Try Your First Basket
+            {/* CTA row */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-12">
+              <Link to="/trial" className="btn-white text-base py-4 px-8">
+                Start Free Trial
               </Link>
-              <Link to="/vegetables" className="btn-secondary text-base py-3.5 px-8">
-                Explore Vegetables
-                <ArrowRight size={18} />
+              <Link to="/baskets" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/25 text-white font-semibold text-base rounded-xl hover:bg-white/20 active:scale-[0.97] backdrop-blur-sm transition-all duration-200">
+                View Plans
               </Link>
             </div>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap gap-6 mt-10">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <CheckCircle size={16} className="text-brand" />
-                Farm-fresh quality
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <CheckCircle size={16} className="text-brand" />
-                Home delivered
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <CheckCircle size={16} className="text-brand" />
-                First basket free
-              </div>
-            </div>
-          </div>
-
-          {/* Happy Customer Photo */}
-          <div className="relative animate-fade-in">
-            <div className="relative rounded-3xl overflow-hidden shadow-card-hover">
-              <img
-                src="/happy-customer.jpg"
-                alt="Happy family receiving fresh Palvii vegetable basket at home"
-                className="w-full h-full object-cover rounded-3xl"
-                style={{ aspectRatio: '3/2' }}
-              />
-              {/* Overlay badge */}
-              <div className="absolute bottom-4 left-4 right-4">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-3 flex items-center justify-between shadow-lg">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl"></span>
-                    <p className="text-sm font-semibold text-brand">Free trial for first families</p>
-                  </div>
-                  <span className="text-xs font-medium text-gray-500 bg-green-50 border border-green-200 rounded-full px-3 py-1">Limited slots</span>
+            {/* Trust row */}
+            <div className="flex flex-wrap gap-x-8 gap-y-3">
+              {[
+                { icon: <Shield size={14} />, text: 'No credit card needed' },
+                { icon: <CheckCircle size={14} />, text: 'Farm-fresh quality' },
+                { icon: <Truck size={14} />, text: 'Direct doorstep delivery' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 text-green-300 text-sm font-medium">
+                  {item.icon} {item.text}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
+
+          {/* Right — stacked cards */}
+          <div className="relative hidden lg:block animate-fade-in">
+            {/* Main image */}
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.4)]">
+              <img
+                src="/basket-trial.jpg"
+                alt="Palvii fresh vegetable basket"
+                className="w-full aspect-[4/3] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            </div>
+
+            {/* Floating stat card */}
+            <div className="absolute -bottom-5 -left-8 bg-white rounded-2xl px-5 py-4 shadow-card-hover animate-slide-up">
+              <p className="text-2xl font-black text-gray-900" style={{ fontFamily: 'Poppins, sans-serif' }}>100%</p>
+              <p className="text-xs text-gray-500 font-medium">Farm-to-Home Delivery</p>
+            </div>
+
+            {/* Floating veggie badge */}
+            <div className="absolute -top-4 -right-4 bg-brand rounded-2xl p-4 shadow-green">
+              <p className="text-white text-sm font-semibold">7 Veggies Weekly</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Wave bottom */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <path d="M0 60L1440 60L1440 20C1200 60 900 0 720 20C540 40 240 0 0 20L0 60Z" fill="white"/>
+        </svg>
+      </div>
+    </section>
+  );
+}
+
+// ─── CATEGORY TILES ────────────────────────────────────────────────────────────
+const categories = [
+  { name: 'Tomatoes',   color: 'bg-red-50',    border: 'border-red-100' },
+  { name: 'Leafy Greens', color: 'bg-green-50', border: 'border-green-100' },
+  { name: 'Root Veggies', color: 'bg-orange-50', border: 'border-orange-100' },
+  { name: 'Onion & Garlic', color: 'bg-purple-50', border: 'border-purple-100' },
+  { name: 'Capsicum',   color: 'bg-yellow-50', border: 'border-yellow-100' },
+  { name: 'Cucumbers',  color: 'bg-lime-50',   border: 'border-lime-100' },
+];
+
+function CategoryStrip() {
+  return (
+    <section className="py-10 bg-white border-b border-gray-100">
+      <div className="page-container">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '-0.02em' }}>
+            What's in season
+          </h2>
+          <Link to="/vegetables" className="text-sm font-semibold text-brand flex items-center gap-1 hover:gap-2 transition-all">
+            View all <ChevronRight size={15} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          {categories.map((cat, i) => (
+            <Link
+              key={i}
+              to="/vegetables"
+              className={`flex flex-col items-center gap-2 p-4 rounded-2xl border ${cat.color} ${cat.border} hover:scale-105 hover:shadow-card transition-all duration-200 cursor-pointer`}
+            >
+              <span className="text-sm font-semibold text-gray-700 text-center leading-tight py-2">{cat.name}</span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Value Cards ──────────────────────────────────────────────────────────────
-const valueCards = [
+// ─── WHY PALVII ────────────────────────────────────────────────────────────────
+const valueProps = [
   {
-    img: '/icon-farm.jpg',
-    title: 'Direct From Farms',
-    desc: 'Vegetables sourced from our farms and selected partner farmers.',
+    icon: <Leaf size={22} className="text-brand" />,
+    bg: 'bg-green-50',
+    title: 'Sourced Locally',
+    desc: 'Working directly with partner farmers in your region.',
   },
   {
-    img: '/icon-quality.jpg',
-    title: 'Carefully Selected',
-    desc: 'Every vegetable is sorted and quality checked before packing.',
+    icon: <Star size={22} className="text-amber-500" />,
+    bg: 'bg-amber-50',
+    title: 'Quality Sorted',
+    desc: 'Every vegetable is checked and sorted before packing.',
   },
   {
-    img: '/icon-packing.jpg',
-    title: 'Carefully Packed',
-    desc: 'Each type of vegetable is packed according to its nature to help protect freshness.',
-  },
-  {
-    img: '/icon-delivery.jpg',
+    icon: <Truck size={22} className="text-blue-500" />,
+    bg: 'bg-blue-50',
     title: 'Home Delivered',
-    desc: 'Your Palvii basket reaches your doorstep on the scheduled delivery day.',
+    desc: 'Fresh to your doorstep on your scheduled delivery day.',
+  },
+  {
+    icon: <Shield size={22} className="text-purple-500" />,
+    bg: 'bg-purple-50',
+    title: 'No Hidden Fees',
+    desc: 'Pay for what you get. Cancel your subscription anytime.',
   },
 ];
 
-function ValueSection() {
+function WhySection() {
   return (
     <section className="py-20 bg-white">
       <div className="page-container">
         <div className="text-center mb-12">
-          <h2 className="section-title mb-4">Why Choose Palvii?</h2>
-          <p className="section-subtitle max-w-2xl mx-auto">
-            We take every step seriously — from farm to your kitchen.
-          </p>
+          <h2 className="section-title mt-4 mb-4">Why Palvii</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {valueCards.map((card, i) => (
-            <div key={i} className="card-hover p-6 text-center group flex flex-col items-center">
-              <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-200 shadow-sm">
-                <img
-                  src={card.img}
-                  alt={card.title}
-                  className="w-full h-full object-cover"
-                />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {valueProps.map((v, i) => (
+            <div key={i} className="card-hover p-6 group">
+              <div className={`w-12 h-12 rounded-2xl ${v.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                {v.icon}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2 font-display">{card.title}</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{card.desc}</p>
+              <h3 className="font-bold text-gray-900 mb-2 text-[15px]" style={{ fontFamily: 'Poppins, sans-serif' }}>{v.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{v.desc}</p>
             </div>
           ))}
         </div>
@@ -143,260 +183,102 @@ function ValueSection() {
   );
 }
 
-// ─── How It Works ─────────────────────────────────────────────────────────────
+// ─── FREE TRIAL BANNER ─────────────────────────────────────────────────────────
+function TrialBanner() {
+  return (
+    <section className="py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="relative rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B4332 0%, #2D6A4F 50%, #40916C 100%)' }}>
+          {/* Decorative circles */}
+          <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-white/5" />
+          <div className="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-white/5" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 px-8 py-10">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-3 py-1 mb-3">
+                <span className="text-xs font-bold text-green-200 uppercase tracking-wider">Limited Slots</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '-0.03em' }}>
+                First basket free.
+              </h2>
+              <p className="text-green-100 text-base max-w-md">
+                7 fresh vegetables delivered to your door. No card required.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              <Link to="/trial" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-brand-dark font-bold rounded-xl hover:bg-green-50 active:scale-[0.97] transition-all shadow-lg text-base whitespace-nowrap">
+                Start Trial
+              </Link>
+              <Link to="/baskets" className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-white/10 border border-white/25 text-white font-semibold rounded-xl hover:bg-white/20 transition-all text-base whitespace-nowrap">
+                See Plans
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── HOW IT WORKS ──────────────────────────────────────────────────────────────
 const steps = [
-  { img: '/icon-farm.jpg', label: 'Farm', desc: 'Grown at our farms and partner farms' },
-  { img: '/icon-harvest.jpg', label: 'Harvest & Source', desc: 'Carefully harvested or sourced' },
-  { img: '/icon-quality.jpg', label: 'Sort & Check', desc: 'Quality check for every vegetable' },
-  { img: '/icon-packing.jpg', label: 'Pack', desc: 'Vegetable-specific careful packing' },
-  { img: '/icon-delivery.jpg', label: 'Deliver', desc: 'Fresh to your doorstep' },
+  { num: '01', title: 'Check Coverage', desc: 'Enter your pincode to confirm delivery.' },
+  { num: '02', title: 'Request Trial', desc: 'Provide details in under 2 minutes.' },
+  { num: '03', title: 'Schedule', desc: 'We verify and schedule your delivery.' },
+  { num: '04', title: 'Receive', desc: 'Get your basket delivered fresh.' },
 ];
 
 function HowItWorksSection() {
   return (
-    <section className="py-20 bg-brand-section">
+    <section className="py-20 section-bg">
       <div className="page-container">
         <div className="text-center mb-14">
-          <h2 className="section-title mb-4">From Our Farm to Your Home</h2>
-          <p className="section-subtitle max-w-xl mx-auto">
-            Every step is done with care, so what reaches you is truly fresh.
-          </p>
+          <h2 className="section-title mt-4 mb-4">How it works</h2>
         </div>
-
-        <div className="relative">
-          <div className="hidden md:block absolute top-10 left-0 right-0 h-0.5 bg-brand/20 mx-16" />
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-            {steps.map((step, i) => (
-              <div key={i} className="relative flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-white rounded-2xl shadow-card overflow-hidden mb-4 relative z-10 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200">
-                  <img src={step.img} alt={step.label} className="w-full h-full object-cover" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-brand text-white rounded-full text-xs font-bold flex items-center justify-center z-20">
-                  {i + 1}
-                </div>
-                <h4 className="font-semibold text-gray-900 text-sm mb-1 font-display">{step.label}</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="text-center mt-10">
-          <Link to="/how-it-works" className="btn-outline">
-            Learn More About Our Process <ArrowRight size={16} />
-          </Link>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          {/* Connector line on desktop */}
+          <div className="hidden lg:block absolute top-9 left-[12.5%] right-[12.5%] h-px bg-brand/20 z-0" />
+          {steps.map((step, i) => (
+            <div key={i} className="relative z-10 flex flex-col items-center text-center">
+              <span className="text-xs font-black text-brand/40 tracking-widest mb-2">{step.num}</span>
+              <h4 className="font-bold text-gray-900 mb-2 text-[15px]" style={{ fontFamily: 'Poppins, sans-serif' }}>{step.title}</h4>
+              <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Trial Basket ─────────────────────────────────────────────────────────────
-function TrialSection() {
-  const [form, setForm] = useState({
-    name: '', mobile: '', whatsapp: '', address: '',
-    area: '', society: '', family_size: '', preferred_delivery_day: '',
-  });
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-    if (name === 'mobile' && !form.whatsapp) {
-      setForm(prev => ({ ...prev, whatsapp: value }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name || !form.mobile || !form.address) {
-      toast.error('Please fill all required fields');
-      return;
-    }
-    setLoading(true);
-    try {
-      await trialService.submit(form);
-      setSubmitted(true);
-      toast.success('Trial request submitted! We\'ll contact you on WhatsApp.');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <section className="py-20 bg-white" id="trial">
-      <div className="page-container">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-1.5 mb-4">
-              <Star size={14} className="text-brand" />
-              <span className="text-sm font-medium text-brand">Limited Pilot Slots</span>
-            </div>
-            <h2 className="section-title mb-4">Try Palvii Once. Completely Free.</h2>
-            <p className="section-subtitle max-w-lg mx-auto">
-              We're starting our journey with a small group of families. Get your first Palvii vegetable basket completely free and tell us what you think.
-            </p>
-          </div>
-
-          {submitted ? (
-            <div className="card p-10 text-center animate-slide-up">
-              <div className="text-5xl mb-4">🎉</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-display">Request Received!</h3>
-              <p className="text-gray-600 mb-6">
-                Thank you! We'll review your request and contact you on WhatsApp to schedule your free Palvii basket.
-              </p>
-              <button
-                onClick={() => openWhatsApp(whatsAppMessages.trialRequest())}
-                className="btn-primary"
-              >
-                <MessageCircle size={18} />
-                Also Message Us on WhatsApp
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="card p-8 space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="label">Full Name *</label>
-                  <input name="name" value={form.name} onChange={handleChange} placeholder="Your name" required className="input" />
-                </div>
-                <div>
-                  <label className="label">Mobile Number *</label>
-                  <input name="mobile" value={form.mobile} onChange={handleChange} placeholder="10-digit mobile" required className="input" type="tel" />
-                </div>
-                <div>
-                  <label className="label">WhatsApp Number</label>
-                  <input name="whatsapp" value={form.whatsapp} onChange={handleChange} placeholder="If different from mobile" className="input" type="tel" />
-                </div>
-                <div>
-                  <label className="label">Family Size</label>
-                  <select name="family_size" value={form.family_size} onChange={handleChange} className="select">
-                    <option value="">Select size</option>
-                    <option value="1-2">1-2 people</option>
-                    <option value="3-4">3-4 people</option>
-                    <option value="5-6">5-6 people</option>
-                    <option value="7+">7+ people</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="label">Delivery Address *</label>
-                <textarea name="address" value={form.address} onChange={handleChange} placeholder="Your full address" required className="input h-24 resize-none" />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="label">Area / Locality</label>
-                  <input name="area" value={form.area} onChange={handleChange} placeholder="e.g. Baner" className="input" />
-                </div>
-                <div>
-                  <label className="label">Society / Apartment</label>
-                  <input name="society" value={form.society} onChange={handleChange} placeholder="e.g. Greenview Apartments" className="input" />
-                </div>
-              </div>
-
-              <div>
-                <label className="label">Preferred Delivery Day</label>
-                <select name="preferred_delivery_day" value={form.preferred_delivery_day} onChange={handleChange} className="select">
-                  <option value="">Any day</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                  <option value="Sunday">Sunday</option>
-                </select>
-              </div>
-
-              <p className="text-xs text-gray-500 bg-gray-50 rounded-xl p-3">
-                📝 Your request will be reviewed by our team. We'll contact you on WhatsApp to confirm availability and schedule delivery. This is a pilot programme for a limited number of families.
-              </p>
-
-              <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 text-base">
-                {loading ? 'Submitting...' : '🌿 Request Free Trial'}
-              </button>
-            </form>
-          )}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── WhatsApp CTA ─────────────────────────────────────────────────────────────
+// ─── WHATSAPP CTA ──────────────────────────────────────────────────────────────
 function WhatsAppCTA() {
   return (
-    <section className="py-16 bg-green-600">
-      <div className="page-container text-center">
-        <div className="text-4xl mb-4">💬</div>
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 font-display">
-          Prefer Ordering on WhatsApp?
-        </h2>
-        <p className="text-green-100 mb-8 text-lg max-w-xl mx-auto">
-          You can also place your order directly on WhatsApp. We're just a message away.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => openWhatsApp(whatsAppMessages.orderBasket())}
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all"
-          >
-            <MessageCircle size={20} />
-            Order on WhatsApp
-          </button>
-          <button
-            onClick={() => openWhatsApp(whatsAppMessages.generalEnquiry())}
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-green-700 text-white font-semibold rounded-xl hover:bg-green-800 transition-all border border-white/20"
-          >
-            Chat with Palvii
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Farm Story ───────────────────────────────────────────────────────────────
-function FarmStorySection() {
-  return (
-    <section className="py-20 bg-brand-section">
+    <section className="py-16 bg-white">
       <div className="page-container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="bg-[#25D366]/8 border border-[#25D366]/20 rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div>
-            <div className="inline-flex items-center gap-2 bg-white border border-brand/20 rounded-full px-4 py-1.5 mb-6">
-              <Sprout size={14} className="text-brand" />
-              <span className="text-sm font-medium text-brand">Our Story</span>
-            </div>
-            <h2 className="section-title mb-6">Where Your Vegetables Begin</h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Our journey starts at the farm. We grow vegetables ourselves and work with selected farmers to bring fresh produce to families.
+            <h3 className="text-2xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '-0.02em' }}>
+              Order via WhatsApp
+            </h3>
+            <p className="text-gray-500 text-base max-w-md">
+              Drop us a message for quick ordering or queries.
             </p>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Every vegetable that reaches you has been carefully handled — from the soil to our sorting facility, and then directly to your home. No unnecessary stops in between.
-            </p>
-            <p className="text-gray-600 leading-relaxed mb-8">
-              We believe families deserve to know where their food comes from. That's the Palvii promise.
-            </p>
-            <Link to="/about" className="btn-primary">
-              Our Story <ArrowRight size={18} />
-            </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { img: '/icon-farm.jpg', label: 'Our Farm' },
-              { img: '/icon-harvest.jpg', label: 'Partner Farmers' },
-              { img: '/icon-quality.jpg', label: 'Fresh Produce' },
-              { img: '/icon-delivery.jpg', label: 'Your Home' },
-            ].map((item, i) => (
-              <div key={i} className="card overflow-hidden text-center hover:shadow-card-hover transition-all duration-200 hover:-translate-y-1">
-                <img src={item.img} alt={item.label} className="w-full h-32 object-cover" />
-                <p className="text-sm font-semibold text-gray-700 py-3 px-4">{item.label}</p>
-              </div>
-            ))}
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <button
+              onClick={() => openWhatsApp(whatsAppMessages.orderBasket())}
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#25D366] text-white font-bold rounded-xl hover:bg-[#20ba5a] active:scale-[0.97] transition-all shadow-lg text-base"
+            >
+              <MessageCircle size={19} />
+              Order on WhatsApp
+            </button>
+            <button
+              onClick={() => openWhatsApp(whatsAppMessages.generalEnquiry())}
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 active:scale-[0.97] transition-all text-base"
+            >
+              General Enquiry
+            </button>
           </div>
         </div>
       </div>
@@ -404,45 +286,16 @@ function FarmStorySection() {
   );
 }
 
-// ─── Reviews ──────────────────────────────────────────────────────────────────
-function ReviewsSection() {
-  return (
-    <section className="py-20 bg-white">
-      <div className="page-container">
-        <div className="text-center mb-12">
-          <h2 className="section-title mb-4">What Our First Families Say</h2>
-          <div className="inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-full px-4 py-2">
-            <Star size={14} className="text-yellow-500" />
-            <span className="text-sm text-yellow-700">Reviews will appear here once our pilot families share their experience</span>
-          </div>
-        </div>
-        <div className="card p-10 text-center max-w-xl mx-auto">
-          <div className="flex justify-center gap-1 mb-4">{[...Array(5)].map((_, i) => <Star key={i} size={28} className="text-yellow-400 fill-yellow-400" />)}</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-3 font-display">Be Among the First</h3>
-          <p className="text-gray-600 mb-6">
-            We're just getting started. Try our free trial basket and be one of the first families to share your experience.
-          </p>
-          <Link to="/trial" className="btn-primary">
-            <Sprout size={18} />
-            Request Free Trial
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Home Page ────────────────────────────────────────────────────────────────
+// ─── PAGE ──────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <ValueSection />
+      <CategoryStrip />
+      <WhySection />
+      <TrialBanner />
       <HowItWorksSection />
-      <TrialSection />
-      <FarmStorySection />
       <WhatsAppCTA />
-      <ReviewsSection />
     </>
   );
 }

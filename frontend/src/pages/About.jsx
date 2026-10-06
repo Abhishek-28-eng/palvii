@@ -74,7 +74,7 @@ export default function AboutPage() {
           <h3 className="text-2xl font-bold mb-3 font-display">Ready to try Palvii?</h3>
           <p className="text-green-200 mb-6">Start with a free trial basket — no obligation.</p>
           <Link to="/trial" className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-brand font-semibold rounded-xl hover:bg-green-50 transition-all">
-            Request Free Trial <ArrowRight size={18} />
+            Submit Request <ArrowRight size={18} />
           </Link>
         </div>
       </div>

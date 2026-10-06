@@ -17,7 +17,10 @@ export const openWhatsApp = (message) => {
 
 export const whatsAppMessages = {
   orderBasket: () => 'Hi Palvii! I would like to order a vegetable basket. Please help me.',
-  trialRequest: () => 'Hi Palvii! I would like to request a free trial basket. Please let me know the next steps.',
+  trialRequest: (data) => {
+    if (!data) return 'Hi Palvii! I would like to request a free trial basket. Please let me know the next steps.';
+    return `*New Trial Request* 🌿\n\nHi Palvii, I would like to request a free trial basket!\n\n*Name:* ${data.name}\n*Mobile:* ${data.mobile}\n*Address:* ${data.address}\n*Area:* ${data.area || 'N/A'}\n*Society:* ${data.society || 'N/A'}\n*Family Size:* ${data.family_size || 'N/A'}\n*Preferred Day:* ${data.preferred_delivery_day || 'Any'}\n\nPlease confirm my slot.`;
+  },
   generalEnquiry: () => 'Hi Palvii! I have a question about your fresh vegetables.',
   subscriptionEnquiry: () => 'Hi Palvii! I am interested in a subscription plan. Please tell me more.',
 };
